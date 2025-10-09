@@ -1,0 +1,60 @@
+# --- Node / Frontend ---
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+vite-error.log*
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.swp
+*.swo
+
+# --- Rust / Backend (Tauri) ---
+/src-tauri/target/
+**/*.rs.bk
+
+# Cargo build artifacts
+*.rlib
+*.rmeta
+*.dSYM/
+Cargo.lock
+target/
+
+# If you want reproducible builds, remove the line above and commit Cargo.lock
+
+# --- Tauri build outputs ---
+/src-tauri/icons/
+*.app
+*.dmg
+*.msi
+*.exe
+*.deb
+*.rpm
+*.AppImage
+*.tar.gz
+*.zip
+
+# --- Environment files ---
+.env
+.env.*
+!.env.example
+
+# --- OS / Misc ---
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# --- Test / Coverage ---
+coverage/
+*.lcov
+.junit/

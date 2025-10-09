@@ -1,0 +1,26 @@
+<template>
+  <v-container class="fill-height d-flex align-center justify-center" max-width="900">
+    <div>
+      <v-switch
+        :label="String(functionStatus)"
+        :model-value="functionStatus === 'On'"
+        @update:model-value="toggleFunctionStatus"
+      ></v-switch>
+    </div>
+  </v-container>
+</template>
+
+<script setup lang="ts">
+import {ref} from "vue";
+import {invoke} from "@tauri-apps/api/core";
+
+const functionStatus = ref<String>("Off");
+
+function toggleFunctionStatus() {
+  functionStatus.value = functionStatus.value === "Off" ? "On" : "Off";
+  spary_switch(functionStatus.value === "On")
+}
+async function spary_switch(status:boolean){
+  await invoke("spary_switch",{status})
+}
+</script>
