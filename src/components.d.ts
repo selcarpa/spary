@@ -10,6 +10,6 @@ declare module 'vue' {
   export interface GlobalComponents {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Spary: typeof import('./components/spary.vue')['default']
+    Spary: typeof import('./components/index/spary.vue')['default']
   }
 }
