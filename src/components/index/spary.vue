@@ -1,5 +1,5 @@
 <template>
-  <v-container class="fill-height d-flex align-center justify-center" max-width="900">
+  <v-container class="fill-height d-flex align-center justify-center">
     <div>
       <v-switch
         :label="String(functionStatus)"
