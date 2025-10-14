@@ -14,7 +14,13 @@ pub fn run() {
             description: "create_initial_tables",
             sql: "CREATE TABLE `group`(id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(60) NOT NULL,url TEXT NULL, arguments JSON NOT NULL default '{}', created_at DATETIME DEFAULT CURRENT_TIMESTAMP, updated_at DATETIME DEFAULT CURRENT_TIMESTAMP)",
             kind: MigrationKind::Up,
-        }
+        },
+        Migration {
+            version: 2,
+            description: "add_node_table",
+            sql: "CREATE TABLE node(id INTEGER PRIMARY KEY AUTOINCREMENT, alias VARCHAR(60) NOT NULL,arguments JSON NOT NULL default '{}', created_at DATETIME DEFAULT CURRENT_TIMESTAMP, updated_at DATETIME DEFAULT CURRENT_TIMESTAMP, group_id INTEGER NOT NULL)",
+            kind: MigrationKind::Up,
+        },
     ];
     tauri::Builder::default()
         .plugin(

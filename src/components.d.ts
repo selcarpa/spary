@@ -9,6 +9,9 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AddGroup: typeof import('./components/nodeEdit/addGroup.vue')['default']
+    AddNode: typeof import('./components/nodeEdit/addNode.vue')['default']
+    NodeList: typeof import('./components/nodeEdit/nodeList.vue')['default']
+    NodesFloatButton: typeof import('./components/nodeEdit/nodesFloatButton.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Spary: typeof import('./components/index/spary.vue')['default']
