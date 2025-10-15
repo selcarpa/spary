@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import {ref, onMounted, computed} from 'vue'
+import {computed, onMounted, ref} from 'vue'
 import {invoke} from '@tauri-apps/api/core'
 import Database from '@tauri-apps/plugin-sql'
+import {Group, groupRepository} from "@/entities/group.ts";
 
 defineProps<{
   groupId: string
@@ -9,6 +10,13 @@ defineProps<{
 
 const db = ref<any>(null)
 const db_ready = ref(false)
+
+const allGroups = ref<Group[]>([])
+
+
+const loadGroups = async () => {
+  allGroups.value = await groupRepository.findAll()
+}
 
 onMounted(async () => {
   db.value = await Database.load('sqlite:spary.db')
@@ -64,6 +72,8 @@ async function add_node(nodeAlias: string, nodeArguments: string | null) {
     isAdding.value = false
   }
 }
+
+loadGroups()
 </script>
 
 <template>
@@ -74,7 +84,13 @@ async function add_node(nodeAlias: string, nodeArguments: string | null) {
             v-model="nodeAlias"
             label="Node alias"
         ></v-text-field>
-        <v-select></v-select>
+        <v-select
+            label="Group"
+            :items="allGroups"
+            item-title="name"
+            item-value="id"
+            variant="solo"
+        ></v-select>
 
         <v-textarea
             v-model="nodeArguments"
