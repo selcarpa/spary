@@ -1,0 +1,56 @@
+{
+  "app": {
+    "title": "Spary",
+    "nodes": "Nodes",
+    "settings": "Settings",
+    "add": "Add",
+    "group": "Group",
+    "node": "Node"
+  },
+  "spary": {
+    "functionStatus": {
+      "on": "On",
+      "off": "Off"
+    }
+  },
+  "nodeList": {
+    "add": "add",
+    "usage": "usage: {traffic}",
+    "noNodes": "No nodes available"
+  },
+  "nodesFloatButton": {
+    "addGroup": "add group",
+    "addNode": "add node"
+  },
+  "addGroup": {
+    "title": "Add Group",
+    "groupName": "Group name",
+    "groupNameRule": "Group name must be between 1 and 15 characters.",
+    "subscribeUrl": "Subscribe URL",
+    "urlInvalid": "URL is not valid.",
+    "arguments": "Arguments",
+    "addGroupButton": "Add",
+    "groupExists": "Group already exists.",
+    "groupAdded": "Group added."
+  },
+  "addNode": {
+    "title": "Add Node",
+    "group": "Group",
+    "nodeAlias": "Node alias",
+    "arguments": "Arguments",
+    "addNodeButton": "Add",
+    "nodeAddedSuccess": "Node added successfully"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "confirm": "Confirm",
+    "darkModeOn": "Dark Mode On",
+    "darkModeOff": "Dark Mode Off",
+    "language": "Language",
+    "english": "English",
+    "chinese": "Chinese"
+  }
+}

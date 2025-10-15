@@ -2,7 +2,7 @@
   <v-container class="fill-height d-flex align-center justify-center">
     <div>
       <v-switch
-        :label="String(functionStatus)"
+        :label="functionStatus === 'On' ? $t('spary.functionStatus.on') : $t('spary.functionStatus.off')"
         :model-value="functionStatus === 'On'"
         @update:model-value="toggleFunctionStatus"
       ></v-switch>

@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import {ref} from 'vue'
 import {useRouter} from "vue-router";
+import { useI18n } from 'vue-i18n';
 import {groupRepository} from "@/entities/group.ts";
 import {nodeRepository} from "@/entities/node.ts";
 
 const router = useRouter()
+useI18n()
 
 interface GroupItem {
   name: string
@@ -69,7 +71,7 @@ loadData()
                 prepend-icon="mdi-plus"
                 @click.stop="addItem(group)"
             >
-              add
+              {{ $t('nodeList.add') }}
             </v-btn>
           </div>
         </v-expansion-panel-title>
@@ -90,7 +92,7 @@ loadData()
                 </v-card-title>
                 <v-card-text>
                   <div>{{ item.url }}</div>
-                  <div>usage: {{ item.traffic }}</div>
+                  <div>{{ $t('nodeList.usage', { traffic: item.traffic }) }}</div>
                 </v-card-text>
               </v-card>
             </v-col>

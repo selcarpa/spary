@@ -14,7 +14,7 @@
               <v-list-item
                   prepend-avatar="/src/assets/logo.svg"
                   subtitle=""
-                  title="Spary"
+                  :title="$t('app.title')"
               ></v-list-item>
             </v-list>
 
@@ -29,16 +29,20 @@
               ></v-list-item>
               <v-list-item
                   prepend-icon="mdi-airport"
-                  title="Nodes"
+                  :title="$t('app.nodes')"
                   value="nodes"
                   @click="router.push('/nodes')"
               ></v-list-item>
               <v-list-item
                   prepend-icon="mdi-cog"
-                  title="Settings"
+                  :title="$t('app.settings')"
                   value="settings"
                   @click="router.push('/settings')"
-              ></v-list-item>
+              >
+                <template v-slot:append>
+                  <language-switcher />
+                </template>
+              </v-list-item>
             </v-list>
           </v-navigation-drawer>
 
@@ -54,8 +58,11 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import LanguageSwitcher from './components/LanguageSwitcher.vue'
 import notificationProvider from './components/notify/notificationProvider.vue'
 
 const drawer = ref(true)
 const router = useRouter()
+useI18n()
 </script>

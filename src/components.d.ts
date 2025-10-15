@@ -10,6 +10,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     AddGroup: typeof import('./components/nodeEdit/addGroup.vue')['default']
     AddNode: typeof import('./components/nodeEdit/addNode.vue')['default']
+    LanguageSwitcher: typeof import('./components/LanguageSwitcher.vue')['default']
     NodeList: typeof import('./components/nodeEdit/nodeList.vue')['default']
     NodesFloatButton: typeof import('./components/nodeEdit/nodesFloatButton.vue')['default']
     NotificationProvider: typeof import('./components/notify/notificationProvider.vue')['default']

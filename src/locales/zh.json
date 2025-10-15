@@ -1,0 +1,56 @@
+{
+  "app": {
+    "title": "Spary",
+    "nodes": "节点",
+    "settings": "设置",
+    "add": "添加",
+    "group": "组",
+    "node": "节点"
+  },
+  "spary": {
+    "functionStatus": {
+      "on": "开",
+      "off": "关"
+    }
+  },
+  "nodeList": {
+    "add": "添加",
+    "usage": "使用量: {traffic}",
+    "noNodes": "没有可用节点"
+  },
+  "nodesFloatButton": {
+    "addGroup": "添加组",
+    "addNode": "添加节点"
+  },
+  "addGroup": {
+    "title": "添加组",
+    "groupName": "组名称",
+    "groupNameRule": "组名称必须在1到15个字符之间。",
+    "subscribeUrl": "订阅链接",
+    "urlInvalid": "URL无效。",
+    "arguments": "参数",
+    "addGroupButton": "添加",
+    "groupExists": "组已存在。",
+    "groupAdded": "组已添加。"
+  },
+  "addNode": {
+    "title": "添加节点",
+    "group": "组",
+    "nodeAlias": "节点别名",
+    "arguments": "参数",
+    "addNodeButton": "添加",
+    "nodeAddedSuccess": "节点添加成功"
+  },
+  "common": {
+    "save": "保存",
+    "cancel": "取消",
+    "delete": "删除",
+    "edit": "编辑",
+    "confirm": "确认",
+    "darkModeOn": "深色模式开",
+    "darkModeOff": "深色模式关",
+    "language": "语言",
+    "english": "英语",
+    "chinese": "中文"
+  }
+}

@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import {ref, computed} from 'vue'
 import {invoke} from '@tauri-apps/api/core'
+import { useI18n } from 'vue-i18n';
 import {groupRepository} from "@/entities/group.ts";
 import {notify} from "@/components/notify/notifyStore.ts";
+
+const { t } = useI18n()
 
 const groupName = ref('')
 const groupNameRule = [
   (value: string): boolean | string => {
     if (value?.length >= 1 && value?.length <= 15) return true
-    return 'Group name must be between 1 and 15 characters.'
+    return t('addGroup.groupNameRule')
   },
 ]
 
@@ -22,7 +25,7 @@ const groupSubscribeUrlRule = [
       new URL(value)
       return true
     } catch (e) {
-      return 'URL is not valid.'
+      return t('addGroup.urlInvalid')
     }
   },
 ]
@@ -41,7 +44,7 @@ async function addGroup() {
     const check_repeat_one = await groupRepository.findByName(groupName.value)
     console.log(check_repeat_one)
     if (check_repeat_one.length > 0) {
-      notify("Group already exists.", {
+      notify(t('addGroup.groupExists'), {
         color: "error"
       })
       return
@@ -55,7 +58,7 @@ async function addGroup() {
           arguments: groupArguments.value
         }
     )
-    notify("Group added.")
+    notify(t('addGroup.groupAdded'))
   }
 }
 
@@ -77,17 +80,17 @@ async function add_group(groupName: string, groupSubscribeUrl: string | null, gr
         <v-text-field
             v-model="groupName"
             :rules="groupNameRule"
-            label="Group name"
+            :label="$t('addGroup.groupName')"
         ></v-text-field>
 
         <v-text-field
             v-model="groupSubscribeUrl"
             :rules="groupSubscribeUrlRule"
-            label="Subscribe URL"
+            :label="$t('addGroup.subscribeUrl')"
         ></v-text-field>
         <v-textarea
             v-model="groupArguments"
-            label="Arguments"
+            :label="$t('addGroup.arguments')"
         ></v-textarea>
         <v-btn
             class="mt-2"
@@ -96,7 +99,7 @@ async function add_group(groupName: string, groupSubscribeUrl: string | null, gr
             :disabled="isAddDisabled"
             :loading="isAdding"
             @click="addGroup">
-          Add
+          {{ $t('addGroup.addGroupButton') }}
         </v-btn>
       </v-form>
     </v-sheet>

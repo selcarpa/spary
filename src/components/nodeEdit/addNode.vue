@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import {ref, onMounted, computed} from 'vue'
+import { useI18n } from 'vue-i18n';
 import {Group, groupRepository} from "@/entities/group.ts";
 import {nodeRepository} from "@/entities/node.ts";
 import {notify} from "@/components/notify/notifyStore.ts";
+
+const { t } = useI18n()
 
 const props = defineProps<{ groupId: string }>()
 
@@ -36,7 +39,7 @@ async function addNode() {
       arguments: nodeArguments.value,
       group_id: selectedGroupId.value
     })
-    notify("Node added successfully")
+    notify(t('addNode.nodeAddedSuccess'))
     isAdding.value = false
   }
 }
@@ -47,7 +50,7 @@ async function addNode() {
       <v-form fast-fail @submit.prevent>
         <v-select
             v-model="selectedGroupId"
-            label="Group"
+            :label="$t('addNode.group')"
             :items="allGroups"
             item-title="name"
             item-value="id"
@@ -56,12 +59,12 @@ async function addNode() {
 
         <v-text-field
             v-model="nodeAlias"
-            label="Node alias"
+            :label="$t('addNode.nodeAlias')"
         ></v-text-field>
 
         <v-textarea
             v-model="nodeArguments"
-            label="Arguments"
+            :label="$t('addNode.arguments')"
         ></v-textarea>
         <v-btn
             class="mt-2"
@@ -70,7 +73,7 @@ async function addNode() {
             :disabled="isAddDisabled"
             :loading="isAdding"
             @click="addNode">
-          Add
+          {{ $t('addNode.addNodeButton') }}
         </v-btn>
       </v-form>
     </v-sheet>

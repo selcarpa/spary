@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import {useRouter} from "vue-router";
+import { useI18n } from 'vue-i18n';
 const router = useRouter()
+useI18n()
 
 </script>
 
@@ -15,13 +17,13 @@ const router = useRouter()
         <template v-slot:prepend>
           <v-icon color="success"></v-icon>
         </template>
-        add group
+        {{ $t('nodesFloatButton.addGroup') }}
       </v-btn>
       <v-btn key="2" prepend-icon="mdi-airplane-marker">
         <template v-slot:prepend>
           <v-icon color="success"></v-icon>
         </template>
-        add node
+        {{ $t('nodesFloatButton.addNode') }}
       </v-btn>
     </v-speed-dial>
   </div>
