@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <notification-provider />
     <v-main>
       <v-card class="fill-height">
         <v-layout class="fill-height">
@@ -53,6 +54,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import notificationProvider from './components/notify/notificationProvider.vue'
 
 const drawer = ref(true)
 const router = useRouter()

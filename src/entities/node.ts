@@ -2,10 +2,9 @@ import {z} from "zod";
 import {getDatabase} from "@/utils/db.ts";
 import {DBDefaultDateTime} from "@/utils/zodCommon.ts";
 
-export const GroupSchema = z.object({
+export const NodeSchema = z.object({
     id: z.number().nullable(),
-    name: z.string(),
-    url: z.string().nullable().optional(),
+    alias: z.string(),
     arguments: z
         .union([z.string(), z.record(z.any(), z.any())]) // 兼容 SQLite JSON 字段可能返回 string 或 object
         .transform(val => {
@@ -20,38 +19,37 @@ export const GroupSchema = z.object({
         }),
     created_at: DBDefaultDateTime,
     updated_at: DBDefaultDateTime,
+    group_id: z.number(),
 });
-export type Group = z.infer<typeof GroupSchema>;
+export type Node = z.infer<typeof NodeSchema>;
 
-export class GroupRepository {
-    async findAll(): Promise<Group[]> {
+export class NodeRepository {
+    async findAll(): Promise<Node[]> {
         const db = await getDatabase();
         const rows = await db.select(`SELECT *
-                                      FROM "group"
+                                      FROM "node"
                                       ORDER BY id DESC`);
-        console.log(
-            rows
-        )
-        return GroupSchema.array().parse(rows);
+        return NodeSchema.array().parse(rows);
     }
 
-    async insert(group: Group): Promise<void> {
+    async insert(node: Node): Promise<void> {
         const db = await getDatabase();
-        await db.execute(`INSERT INTO "group" (name, url, arguments)
+        await db.execute(`INSERT INTO "node" (alias, arguments, group_id)
                           VALUES (?, ?, ?)`, [
-            group.name,
-            group.url,
-            JSON.stringify(group.arguments),
+            node.alias,
+            JSON.stringify(node.arguments),
+            node.group_id
         ]);
     }
 
-    async findByName(name: string): Promise<Group[]> {
+    async findByAlias(alias: string): Promise<Node[]> {
         const db = await getDatabase();
         const rows = await db.select(`SELECT *
-                                      FROM "group"
-                                      WHERE name = ?`, [name]);
-        return GroupSchema.array().parse(rows);
+                                      FROM "node"
+                                      WHERE alias = ?`, [alias]);
+        return NodeSchema.array().parse(rows);
     }
+
 }
 
-export const groupRepository = new GroupRepository();
+export const nodeRepository = new NodeRepository();

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import {ref} from 'vue'
-import Database from "@tauri-apps/plugin-sql";
 import {useRouter} from "vue-router";
+import {groupRepository} from "@/entities/group.ts";
+import {nodeRepository} from "@/entities/node.ts";
 
 const router = useRouter()
 
@@ -17,19 +18,13 @@ interface Group {
   id: number
 }
 
-const db = ref<any>(null)
 const panels = ref([])
 const groups = ref<Group[]>([])
 
 const loadData = async () => {
-  db.value = await Database.load('sqlite:spary.db')
 
-  const groupsInDb = await db.value.select(
-      'SELECT * FROM `group`'
-  )
-  const nodesInDb = await db.value.select(
-      'SELECT * FROM `node`'
-  )
+  const groupsInDb = await groupRepository.findAll()
+  const nodesInDb = await nodeRepository.findAll()
 
   for (let i = 0; i < groupsInDb.length; i++) {
     const group: any = groupsInDb[i]

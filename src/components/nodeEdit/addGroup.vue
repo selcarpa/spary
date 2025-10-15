@@ -1,21 +1,14 @@
 <script setup lang="ts">
-import {ref, onMounted, computed} from 'vue'
+import {ref, computed} from 'vue'
 import {invoke} from '@tauri-apps/api/core'
-import Database from '@tauri-apps/plugin-sql'
-
-const db = ref<any>(null)
-const db_ready = ref(false)
-
-onMounted(async () => {
-  db.value = await Database.load('sqlite:spary.db')
-  db_ready.value = true
-})
+import {groupRepository} from "@/entities/group.ts";
+import {notify} from "@/components/notify/notifyStore.ts";
 
 const groupName = ref('')
 const groupNameRule = [
   (value: string): boolean | string => {
-    if (value?.length >= 3 && value?.length <= 15) return true
-    return 'Group name must be between 3 and 15 characters.'
+    if (value?.length >= 1 && value?.length <= 15) return true
+    return 'Group name must be between 1 and 15 characters.'
   },
 ]
 
@@ -38,43 +31,31 @@ const groupArguments = ref<string | null>(null)
 const isAdding = ref(false)
 
 const isAddDisabled = computed(() => {
-  return !groupName.value || groupName.value.length < 3 || groupName.value.length > 15 || isAdding.value || !db_ready.value
+  return !groupName.value || groupName.value.length < 3 || groupName.value.length > 15 || isAdding.value
 })
 
 async function addGroup() {
   if (!isAddDisabled.value) {
-    add_group(groupName.value, groupSubscribeUrl.value, groupArguments.value)
+    await add_group(groupName.value, groupSubscribeUrl.value, groupArguments.value)
 
-    const check_repeat_one = await db.value.select(
-        "SELECT * FROM `group` WHERE name = ?",
-        [groupName.value]
-    )
+    const check_repeat_one = await groupRepository.findByName(groupName.value)
     console.log(check_repeat_one)
     if (check_repeat_one.length > 0) {
-      alert("Group already exists.")
+      notify("Group already exists.", {
+        color: "error"
+      })
       return
     }
 
-    let add_result
-    const params = [groupName.value];
-    let sqlStmt = "INSERT INTO `group` (name";
-
-    if (groupSubscribeUrl.value) {
-      sqlStmt += ", url";
-      params.push(groupSubscribeUrl.value);
-    }
-
-    if (groupArguments.value) {
-      sqlStmt += ", arguments";
-      params.push(groupArguments.value);
-    }
-
-    sqlStmt += ") VALUES (" + params.map(() => "?").join(", ") + ")";
-    add_result = await db.value.execute(sqlStmt, params);
-
-    if (add_result.rowsAffected > 0) {
-      alert("Group added.")
-    }
+    await groupRepository.insert(
+        {
+          created_at: null, id: null, updated_at: null,
+          name: groupName.value,
+          url: groupSubscribeUrl.value,
+          arguments: groupArguments.value
+        }
+    )
+    notify("Group added.")
   }
 }
 
@@ -86,6 +67,7 @@ async function add_group(groupName: string, groupSubscribeUrl: string | null, gr
     isAdding.value = false
   }
 }
+
 </script>
 
 <template>

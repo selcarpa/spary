@@ -1,96 +1,63 @@
 <script setup lang="ts">
-import {computed, onMounted, ref} from 'vue'
-import {invoke} from '@tauri-apps/api/core'
-import Database from '@tauri-apps/plugin-sql'
+import {ref, onMounted, computed} from 'vue'
 import {Group, groupRepository} from "@/entities/group.ts";
+import {nodeRepository} from "@/entities/node.ts";
+import {notify} from "@/components/notify/notifyStore.ts";
 
-defineProps<{
-  groupId: string
-}>()
-
-const db = ref<any>(null)
-const db_ready = ref(false)
+const props = defineProps<{ groupId: string }>()
 
 const allGroups = ref<Group[]>([])
-
+const selectedGroupId = ref<number | null>(null)
 
 const loadGroups = async () => {
   allGroups.value = await groupRepository.findAll()
+  const group = allGroups.value.find(g => g.id === Number(props.groupId))
+  selectedGroupId.value = group ? group.id : null
 }
 
-onMounted(async () => {
-  db.value = await Database.load('sqlite:spary.db')
-  db_ready.value = true
-})
+onMounted(loadGroups)
 
 const nodeAlias = ref('')
-
 const nodeArguments = ref<string | null>(null)
 const isAdding = ref(false)
 
 const isAddDisabled = computed(() => {
-  return !nodeAlias.value || nodeAlias.value.length < 3 || nodeAlias.value.length > 15 || isAdding.value || !db_ready.value
+  return !nodeAlias.value || nodeAlias.value.length < 3 || nodeAlias.value.length > 15 || isAdding.value
 })
 
 async function addNode() {
-  if (!isAddDisabled.value) {
-    await add_node(nodeAlias.value, nodeArguments.value)
-
-    const check_repeat_one = await db.value.select(
-        "SELECT * FROM `node` WHERE alias = ?",
-        [nodeAlias.value]
-    )
-    console.log(check_repeat_one)
-    if (check_repeat_one.length > 0) {
-      alert("Node already exists.")
-      return
-    }
-
-    let add_result
-    const params = [nodeAlias.value];
-    let sqlStmt = "INSERT INTO `node` (alias";
-
-    if (nodeArguments.value) {
-      sqlStmt += ", arguments";
-      params.push(nodeArguments.value);
-    }
-
-    sqlStmt += ") VALUES (" + params.map(() => "?").join(", ") + ")";
-    add_result = await db.value.execute(sqlStmt, params);
-
-    if (add_result.rowsAffected > 0) {
-      alert("Node added.")
-    }
-  }
-}
-
-async function add_node(nodeAlias: string, nodeArguments: string | null) {
-  isAdding.value = true
-  try {
-    await invoke("add_node", {nodeAlias, nodeArguments})
-  } finally {
+  if (!isAddDisabled.value && selectedGroupId.value !== null) {
+    isAdding.value = true
+    await nodeRepository.insert({
+      created_at: null,
+      id: null,
+      updated_at: null,
+      alias: nodeAlias.value,
+      arguments: nodeArguments.value,
+      group_id: selectedGroupId.value
+    })
+    notify("Node added successfully")
     isAdding.value = false
   }
 }
-
-loadGroups()
 </script>
-
 <template>
   <v-container>
     <v-sheet class="mx-auto" width="80vw">
       <v-form fast-fail @submit.prevent>
-        <v-text-field
-            v-model="nodeAlias"
-            label="Node alias"
-        ></v-text-field>
         <v-select
+            v-model="selectedGroupId"
             label="Group"
             :items="allGroups"
             item-title="name"
             item-value="id"
             variant="solo"
         ></v-select>
+
+        <v-text-field
+            v-model="nodeAlias"
+            label="Node alias"
+        ></v-text-field>
 
         <v-textarea
             v-model="nodeArguments"

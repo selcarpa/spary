@@ -12,6 +12,7 @@ declare module 'vue' {
     AddNode: typeof import('./components/nodeEdit/addNode.vue')['default']
     NodeList: typeof import('./components/nodeEdit/nodeList.vue')['default']
     NodesFloatButton: typeof import('./components/nodeEdit/nodesFloatButton.vue')['default']
+    NotificationProvider: typeof import('./components/notify/notificationProvider.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Spary: typeof import('./components/index/spary.vue')['default']
