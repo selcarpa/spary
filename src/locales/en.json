@@ -1,5 +1,6 @@
 {
   "app": {
+    "mainPage": "Home",
     "title": "Spary",
     "nodes": "Nodes",
     "settings": "Settings",

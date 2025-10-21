@@ -1,51 +1,10 @@
 <template>
   <v-app>
-    <notification-provider />
+    <notification-provider/>
     <v-main>
       <v-card class="fill-height">
         <v-layout class="fill-height">
-          <v-navigation-drawer
-              expand-on-hover
-              permanent
-              rail
-              v-model="drawer"
-          >
-            <v-list>
-              <v-list-item
-                  prepend-avatar="/src/assets/logo.svg"
-                  subtitle=""
-                  :title="$t('app.title')"
-              ></v-list-item>
-            </v-list>
-
-            <v-divider></v-divider>
-
-            <v-list density="compact" nav>
-              <v-list-item
-                prepend-icon="mdi-just-nothing"
-                title="🌊"
-                value="spary"
-                @click="router.push('/')"
-              ></v-list-item>
-              <v-list-item
-                  prepend-icon="mdi-airport"
-                  :title="$t('app.nodes')"
-                  value="nodes"
-                  @click="router.push('/nodes')"
-              ></v-list-item>
-              <v-list-item
-                  prepend-icon="mdi-cog"
-                  :title="$t('app.settings')"
-                  value="settings"
-                  @click="router.push('/settings')"
-              >
-                <template v-slot:append>
-                  <language-switcher />
-                </template>
-              </v-list-item>
-            </v-list>
-          </v-navigation-drawer>
-
+          <main-drawer/>
           <v-main style="height: 100vh">
             <router-view/>
           </v-main>
@@ -56,13 +15,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
-import LanguageSwitcher from './components/LanguageSwitcher.vue'
+import {useI18n} from 'vue-i18n'
 import notificationProvider from './components/notify/notificationProvider.vue'
+import MainDrawer from "@/components/index/mainDrawer.vue";
 
-const drawer = ref(true)
-const router = useRouter()
 useI18n()
 </script>

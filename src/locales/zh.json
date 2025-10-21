@@ -1,5 +1,6 @@
 {
   "app": {
+    "mainPage": "主页",
     "title": "Spary",
     "nodes": "节点",
     "settings": "设置",

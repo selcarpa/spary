@@ -58,3 +58,4 @@ Desktop.ini
 coverage/
 *.lcov
 .junit/
+/cores/

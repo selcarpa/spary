@@ -1,0 +1,3 @@
+enum Core{
+    XRAY(String),
+}

@@ -3,8 +3,10 @@
 use crate::group::add_group;
 use crate::spary::spary_switch;
 use tauri_plugin_sql::{Migration, MigrationKind};
+mod exe;
 mod group;
 mod spary;
+mod cores;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -21,8 +23,15 @@ pub fn run() {
             sql: "CREATE TABLE node(id INTEGER PRIMARY KEY AUTOINCREMENT, alias VARCHAR(60) NOT NULL,arguments JSON NOT NULL default '{}', created_at DATETIME DEFAULT CURRENT_TIMESTAMP, updated_at DATETIME DEFAULT CURRENT_TIMESTAMP, group_id INTEGER NOT NULL)",
             kind: MigrationKind::Up,
         },
+        Migration{
+            version:3,
+            description:"add default group",
+            sql:"INSERT INTO `group`(name) VALUES('default')",
+            kind:MigrationKind::Up,
+        }
     ];
     tauri::Builder::default()
+        .plugin(tauri_plugin_fs::init())
         .plugin(
             tauri_plugin_sql::Builder::default()
                 .add_migrations("sqlite:spary.db", migrations)
