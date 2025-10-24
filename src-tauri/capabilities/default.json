@@ -11,6 +11,9 @@
     "sql:default",
     "sql:allow-execute",
     "fs:default",
+    "os:default",
+    "shell:default",
+    "process:default",
     {
       "identifier": "fs:allow-write-text-file",
       "allow": [
@@ -24,6 +27,28 @@
       "allow": [
         {
           "path": "$APPCONFIG/*"
+        }
+      ]
+    },
+    {
+      "identifier": "fs:allow-exists",
+      "allow": [
+        {
+          "path": "$APPCONFIG/*"
+        }
+      ]
+    },
+    {
+      "identifier": "shell:allow-execute",
+      "allow": [
+        {
+          "name": "exec-sh",
+          "cmd": "sh",
+          "args": [
+            "-c",
+            "echo 'Hello World!'"
+          ],
+          "sidecar": false
         }
       ]
     }

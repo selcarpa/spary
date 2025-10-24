@@ -51,6 +51,12 @@ useI18n()
           <language-switcher/>
         </template>
       </v-list-item>
+      <v-list-item
+          prepend-icon="mdi-bug"
+          :title="$t('app.debug')"
+          value="coreLog"
+          @click="router.push('/coreLog')"
+      ></v-list-item>
     </v-list>
   </v-navigation-drawer>
 </template>

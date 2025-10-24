@@ -1,6 +1,10 @@
-import {writeTextFile, BaseDirectory, remove} from '@tauri-apps/plugin-fs';
+import {writeTextFile, BaseDirectory, remove, exists} from '@tauri-apps/plugin-fs';
 export async function removeConfigFile(){
     try {
+        const tokenExists = await exists('config.json', { baseDir: BaseDirectory.AppConfig });
+        if (!tokenExists) {
+            return;
+        }
         await remove('config.json', { baseDir: BaseDirectory.AppConfig });
     } catch (error) {
         // ignore

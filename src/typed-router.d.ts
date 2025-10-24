@@ -21,6 +21,7 @@ declare module 'vue-router/auto-routes' {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
     '/addGroup': RouteRecordInfo<'/addGroup', '/addGroup', Record<never, never>, Record<never, never>>,
     '/addNode/[groupId]': RouteRecordInfo<'/addNode/[groupId]', '/addNode/:groupId', { groupId: ParamValue<true> }, { groupId: ParamValue<false> }>,
+    '/coreLog': RouteRecordInfo<'/coreLog', '/coreLog', Record<never, never>, Record<never, never>>,
     '/nodes': RouteRecordInfo<'/nodes', '/nodes', Record<never, never>, Record<never, never>>,
     '/settings': RouteRecordInfo<'/settings', '/settings', Record<never, never>, Record<never, never>>,
   }
@@ -46,6 +47,10 @@ declare module 'vue-router/auto-routes' {
     }
     'src/pages/addNode/[groupId].vue': {
       routes: '/addNode/[groupId]'
+      views: never
+    }
+    'src/pages/coreLog.vue': {
+      routes: '/coreLog'
       views: never
     }
     'src/pages/nodes.vue': {

@@ -6,7 +6,8 @@
     "settings": "设置",
     "add": "添加",
     "group": "组",
-    "node": "节点"
+    "node": "节点",
+    "debug": "调试"
   },
   "spary": {
     "functionStatus": {

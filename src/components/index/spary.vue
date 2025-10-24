@@ -13,18 +13,20 @@
 <script setup lang="ts">
 import {ref} from "vue";
 import {invoke} from "@tauri-apps/api/core";
-import {genConfigFile, removeConfigFile} from "@/utils/bootArgs.ts";
+import {genConfigFile, removeConfigFile} from "@/utils/coreBootArgs.ts";
+import {coreStart} from "@/utils/coreBoot.ts";
 
 const functionStatus = ref<String>("Off");
 
-function toggleFunctionStatus() {
+async function toggleFunctionStatus() {
   functionStatus.value = functionStatus.value === "Off" ? "On" : "Off";
-  spary_switch(functionStatus.value === "On")
+  await spary_switch(functionStatus.value === "On")
 
   if (functionStatus.value === "On") {
-    genConfigFile()
+    await genConfigFile()
+    await coreStart()
   } else {
-    removeConfigFile()
+    await removeConfigFile()
   }
 }
 

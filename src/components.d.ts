@@ -11,6 +11,7 @@ declare module 'vue' {
     AddGroup: typeof import('./components/nodeEdit/addGroup.vue')['default']
     AddNode: typeof import('./components/nodeEdit/addNode.vue')['default']
     LanguageSwitcher: typeof import('./components/LanguageSwitcher.vue')['default']
+    MainConsole: typeof import('./components/index/mainConsole.vue')['default']
     MainDrawer: typeof import('./components/index/mainDrawer.vue')['default']
     NodeList: typeof import('./components/nodeEdit/nodeList.vue')['default']
     NodesFloatButton: typeof import('./components/nodeEdit/nodesFloatButton.vue')['default']
