@@ -6,7 +6,7 @@
         v-model="visible[item.id]"
         :timeout="item.timeout"
         :color="item.color"
-        :variant="item.variant"
+        :variant="item.variant as any"
         top
         right
         :style="{

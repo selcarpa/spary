@@ -59,3 +59,4 @@ coverage/
 *.lcov
 .junit/
 /cores/
+/src-tauri/gen/
