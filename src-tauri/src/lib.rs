@@ -1,7 +1,10 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 
 use crate::spary::spary_switch;
+use tauri::menu::{Menu, MenuItem};
+use tauri::tray::TrayIconBuilder;
 use tauri_plugin_sql::{Migration, MigrationKind};
+
 mod spary;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -26,6 +29,7 @@ pub fn run() {
             kind:MigrationKind::Up,
         }
     ];
+
     tauri::Builder::default()
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_shell::init())
@@ -38,6 +42,20 @@ pub fn run() {
         )
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![spary_switch])
+        .setup(|app| {
+            let quit_item = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
+            let menu = Menu::with_items(app, &[&quit_item])?;
+            let tray = TrayIconBuilder::new()
+                .tooltip("spary")
+                .on_menu_event(move |app, event| {
+                    if event.id().as_ref() == "quit" {
+                        app.exit(0);
+                    }
+                })
+                .build(app)?;
+            tray.set_menu(Some(menu))?;
+            Ok(())
+        })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
