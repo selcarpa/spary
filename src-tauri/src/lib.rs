@@ -1,8 +1,7 @@
-// Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-
+use tauri::Manager;
 use crate::spary::spary_switch;
 use tauri::menu::{Menu, MenuItem};
-use tauri::tray::TrayIconBuilder;
+use tauri::tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent};
 use tauri_plugin_sql::{Migration, MigrationKind};
 
 mod spary;
@@ -50,6 +49,24 @@ pub fn run() {
                 .on_menu_event(move |app, event| {
                     if event.id().as_ref() == "quit" {
                         app.exit(0);
+                    }
+                })
+                //Linux: Unsupported. The event is not emitted even though the icon is shown and will still show a context menu on right click.
+                .on_tray_icon_event(|tray, event| match event {
+                    TrayIconEvent::Click {
+                        button: MouseButton::Left,
+                        button_state: MouseButtonState::Up,
+                        ..
+                    } => {
+                        let app = tray.app_handle();
+                        if let Some(window) = app.get_webview_window("main") {
+                            let _ = window.unminimize();
+                            let _ = window.show();
+                            let _ = window.set_focus();
+                        }
+                    }
+                    _ => {
+                        println!("unhandled event {event:?}");
                     }
                 })
                 .build(app)?;
