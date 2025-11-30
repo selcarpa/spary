@@ -1,9 +1,12 @@
-use tauri::Manager;
 use crate::spary::spary_switch;
+use std::sync::Arc;
 use tauri::menu::{Menu, MenuItem};
 use tauri::tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent};
+use tauri::Manager;
 use tauri_plugin_sql::{Migration, MigrationKind};
+use tokio::sync::Mutex;
 
+mod mcp_server;
 mod spary;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -71,8 +74,60 @@ pub fn run() {
                 })
                 .build(app)?;
             tray.set_menu(Some(menu))?;
+
+            // Start the MCP HTTP server in a background task
+            let app_handle = app.handle().clone();
+            std::thread::spawn(move || {
+                start_mcp_server(app_handle);
+            });
+
             Ok(())
         })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
+}
+
+fn start_mcp_server(app_handle: tauri::AppHandle) {
+    // Disable MCP server for now
+    if false {
+        return;
+    }
+    use mcp_server::AppState;
+
+    // Create the shared application state
+    let state = AppState {
+        app_handle,
+        spray_status: Arc::new(Mutex::new(false)), // Initial spray status is off
+    };
+
+    // Configure Rocket with custom settings
+    let rocket = rocket::build()
+        .configure(rocket::Config {
+            port: 3000,
+            address: "127.0.0.1".parse().expect("Invalid address"),
+            ..rocket::Config::default()
+        })
+        .manage(state)
+        .mount(
+            "/",
+            rocket::routes![
+                mcp_server::initialize,
+                mcp_server::get_capabilities,
+                mcp_server::list_tools,
+                mcp_server::call_tool,
+                mcp_server::set_spray_status,
+                mcp_server::get_spray_status
+            ],
+        );
+
+    println!("MCP server running on http://127.0.0.1:3000");
+
+    // Start the server
+    tokio::runtime::Builder::new_current_thread()
+        .enable_all()
+        .build()
+        .unwrap()
+        .block_on(async {
+            rocket.launch().await.unwrap();
+        });
 }

@@ -4,6 +4,8 @@ import { useI18n } from 'vue-i18n';
 import {Group, groupRepository} from "@/entities/group.ts";
 import {nodeRepository} from "@/entities/node.ts";
 import {notify} from "@/components/notify/notifyStore.ts";
+import {ConfigurationSchema} from "@/utils/core/configurator/schema/schema.ts";
+import {CoreTypes} from "@/utils/core/CoreDef.ts";
 
 const { t } = useI18n()
 
@@ -11,6 +13,7 @@ const props = defineProps<{ groupId: string }>()
 
 const allGroups = ref<Group[]>([])
 const selectedGroupId = ref<number | null>(null)
+const configurationSchema= ref<ConfigurationSchema | null>(null)
 
 const loadGroups = async () => {
   allGroups.value = await groupRepository.findAll()
@@ -62,10 +65,14 @@ async function addNode() {
             :label="$t('addNode.nodeAlias')"
         ></v-text-field>
 
-        <v-textarea
-            v-model="nodeArguments"
-            :label="$t('addNode.arguments')"
-        ></v-textarea>
+        <v-select
+            v-model="configurationSchema"
+            :label="$t('addNode.nodeType')"
+            :items="CoreTypes"
+            item-title="name"
+            variant="solo">
+        </v-select>
+
         <v-btn
             class="mt-2"
             type="submit"
