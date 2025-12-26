@@ -41,7 +41,9 @@
     "nodeAlias": "节点别名",
     "arguments": "参数",
     "addNodeButton": "添加",
-    "nodeAddedSuccess": "节点添加成功"
+    "nodeAddedSuccess": "节点添加成功",
+    "nodeAddedError": "添加节点时出错",
+    "nodeType": "节点类型"
   },
   "common": {
     "save": "保存",

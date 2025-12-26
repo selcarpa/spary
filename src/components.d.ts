@@ -13,11 +13,13 @@ declare module 'vue' {
     LanguageSwitcher: typeof import('./components/LanguageSwitcher.vue')['default']
     MainConsole: typeof import('./components/index/mainConsole.vue')['default']
     MainDrawer: typeof import('./components/index/mainDrawer.vue')['default']
+    NodeConfigurator: typeof import('./components/nodeEdit/nodeConfigurator.vue')['default']
     NodeList: typeof import('./components/nodeEdit/nodeList.vue')['default']
     NodesFloatButton: typeof import('./components/nodeEdit/nodesFloatButton.vue')['default']
     NotificationProvider: typeof import('./components/notify/notificationProvider.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SchemaField: typeof import('./components/nodeEdit/SchemaField.vue')['default']
     Spary: typeof import('./components/index/spary.vue')['default']
   }
 }

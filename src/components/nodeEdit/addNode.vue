@@ -6,6 +6,7 @@ import {nodeRepository} from "@/entities/node.ts";
 import {notify} from "@/components/notify/notifyStore.ts";
 import {ConfigurationSchema} from "@/utils/core/configurator/schema/schema.ts";
 import {CoreTypes} from "@/utils/core/CoreDef.ts";
+import NodeConfigurator from "@/components/nodeEdit/nodeConfigurator.vue";
 
 const { t } = useI18n()
 
@@ -14,6 +15,7 @@ const props = defineProps<{ groupId: string }>()
 const allGroups = ref<Group[]>([])
 const selectedGroupId = ref<number | null>(null)
 const configurationSchema= ref<ConfigurationSchema | null>(null)
+const nodeConfig = ref<object | null>(null)
 
 const loadGroups = async () => {
   allGroups.value = await groupRepository.findAll()
@@ -24,33 +26,47 @@ const loadGroups = async () => {
 onMounted(loadGroups)
 
 const nodeAlias = ref('')
-const nodeArguments = ref<string | null>(null)
 const isAdding = ref(false)
 
 const isAddDisabled = computed(() => {
   return !nodeAlias.value || nodeAlias.value.length < 3 || nodeAlias.value.length > 15 || isAdding.value
 })
 
+function onConfigurationSchemaChange(value: any) {
+  console.log('Configuration schema changed:', value);
+  // 确保设置的值是正确的对象结构
+  configurationSchema.value = value;
+}
+
 async function addNode() {
   if (!isAddDisabled.value && selectedGroupId.value !== null) {
     isAdding.value = true
-    await nodeRepository.insert({
-      created_at: null,
-      id: null,
-      updated_at: null,
-      alias: nodeAlias.value,
-      arguments: nodeArguments.value,
-      group_id: selectedGroupId.value
-    })
-    notify(t('addNode.nodeAddedSuccess'))
-    isAdding.value = false
+    try {
+      await nodeRepository.insert({
+        created_at: null,
+        id: null,
+        updated_at: null,
+        alias: nodeAlias.value,
+        arguments: nodeConfig.value || {},
+        group_id: selectedGroupId.value
+      })
+      notify(t('addNode.nodeAddedSuccess'))
+      // Reset form after successful submission
+      nodeAlias.value = ''
+      nodeConfig.value = null
+    } catch (error) {
+      console.error('Error adding node:', error)
+      notify(t('addNode.nodeAddedError'))
+    } finally {
+      isAdding.value = false
+    }
   }
 }
 </script>
 <template>
   <v-container>
     <v-sheet class="mx-auto" width="80vw">
-      <v-form fast-fail @submit.prevent>
+      <v-form fast-fail @submit.prevent="addNode">
         <v-select
             v-model="selectedGroupId"
             :label="$t('addNode.group')"
@@ -70,16 +86,19 @@ async function addNode() {
             :label="$t('addNode.nodeType')"
             :items="CoreTypes"
             item-title="name"
-            variant="solo">
+            return-object
+            variant="solo"
+            @update:modelValue="onConfigurationSchemaChange">
         </v-select>
+
+        <node-configurator v-if="configurationSchema" :configuration-schema="configurationSchema" v-model="nodeConfig"/>
 
         <v-btn
             class="mt-2"
             type="submit"
             block
             :disabled="isAddDisabled"
-            :loading="isAdding"
-            @click="addNode">
+            :loading="isAdding">
           {{ $t('addNode.addNodeButton') }}
         </v-btn>
       </v-form>

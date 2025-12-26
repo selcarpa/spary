@@ -32,7 +32,8 @@
     "arguments": "Arguments",
     "addGroupButton": "Add",
     "groupExists": "Group already exists.",
-    "groupAdded": "Group added."
+    "groupAdded": "Group added.",
+    "nodeType": "Node Type"
   },
   "addNode": {
     "title": "Add Node",
@@ -40,7 +41,8 @@
     "nodeAlias": "Node alias",
     "arguments": "Arguments",
     "addNodeButton": "Add",
-    "nodeAddedSuccess": "Node added successfully"
+    "nodeAddedSuccess": "Node added successfully",
+    "nodeAddedError": "Error adding node"
   },
   "common": {
     "save": "Save",
