@@ -6,6 +6,7 @@ import LanguageSwitcher from '../LanguageSwitcher.vue'
 import {useI18n} from "vue-i18n";
 
 const drawer = ref(true)
+const rail = ref(true)
 const router = useRouter()
 
 useI18n()
@@ -15,7 +16,7 @@ useI18n()
   <v-navigation-drawer
       expand-on-hover
       permanent
-      rail
+      :rail="rail"
       v-model="drawer"
   >
     <v-list>
@@ -23,6 +24,7 @@ useI18n()
           prepend-avatar="/src/assets/logo.svg"
           subtitle=""
           :title="$t('app.title')"
+          @click="rail = !rail"
       ></v-list-item>
     </v-list>
 

@@ -1,10 +1,10 @@
 <template>
   <v-app>
     <notification-provider/>
-    <v-main class="d-flex" style="height: 100vh;">
+    <main-drawer/>
+    <v-main class="d-flex">
       <v-card class="d-flex flex-column" style="height: 100%; width: 100%;">
         <v-layout class="d-flex flex-column" style="height: 100%;">
-          <main-drawer/>
           <v-card class="flex-grow-1 overflow-y-auto ma-4">
             <router-view/>
           </v-card>

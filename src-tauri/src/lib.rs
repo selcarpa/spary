@@ -89,45 +89,48 @@ pub fn run() {
 
 fn start_mcp_server(app_handle: tauri::AppHandle) {
     // Disable MCP server for now
-    if false {
+    if true {
         return;
+    } else {
+        use mcp_server::AppState;
+
+        // Create the shared application state
+        let state = AppState {
+            app_handle,
+            spray_status: Arc::new(Mutex::new(false)), // Initial spray status is off
+        };
+        let port = 17564;
+        let host = "127.0.0.1";
+
+        // Configure Rocket with custom settings
+        let rocket = rocket::build()
+            .configure(rocket::Config {
+                port,
+                address: host.parse().expect("Invalid address"),
+                ..rocket::Config::default()
+            })
+            .manage(state)
+            .mount(
+                "/",
+                rocket::routes![
+                    mcp_server::initialize,
+                    mcp_server::get_capabilities,
+                    mcp_server::list_tools,
+                    mcp_server::call_tool,
+                    mcp_server::set_spray_status,
+                    mcp_server::get_spray_status
+                ],
+            );
+
+        println!("MCP server running on http://{host}:{port}");
+
+        // Start the server
+        tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()
+            .unwrap()
+            .block_on(async {
+                rocket.launch().await.unwrap();
+            });
     }
-    use mcp_server::AppState;
-
-    // Create the shared application state
-    let state = AppState {
-        app_handle,
-        spray_status: Arc::new(Mutex::new(false)), // Initial spray status is off
-    };
-
-    // Configure Rocket with custom settings
-    let rocket = rocket::build()
-        .configure(rocket::Config {
-            port: 3000,
-            address: "127.0.0.1".parse().expect("Invalid address"),
-            ..rocket::Config::default()
-        })
-        .manage(state)
-        .mount(
-            "/",
-            rocket::routes![
-                mcp_server::initialize,
-                mcp_server::get_capabilities,
-                mcp_server::list_tools,
-                mcp_server::call_tool,
-                mcp_server::set_spray_status,
-                mcp_server::get_spray_status
-            ],
-        );
-
-    println!("MCP server running on http://127.0.0.1:3000");
-
-    // Start the server
-    tokio::runtime::Builder::new_current_thread()
-        .enable_all()
-        .build()
-        .unwrap()
-        .block_on(async {
-            rocket.launch().await.unwrap();
-        });
 }
